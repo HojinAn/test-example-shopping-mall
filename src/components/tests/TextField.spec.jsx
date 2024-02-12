@@ -70,3 +70,11 @@ describe('placeholder', () => {
     expect(textInput).toBeInTheDocument();
   });
 });
+
+it('텍스트를 입력하면 onChange prop으로 등록한 함수가 호출된다.', async () => {
+  const { user } = await render(<TextField />);
+
+  const textInput = screen.getByPlaceholderText('텍스트를 입력해 주세요.');
+
+  await user.type(textInput, 'test');
+});
