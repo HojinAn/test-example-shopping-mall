@@ -20,9 +20,20 @@ afterAll(() => {
   console.log('root - afterAll');
 });
 
+// 전역 변수를 사용해서 동작을 분리하면
+// 이전 테스트에서 제대로 변경해놓지 않으면 다른 테스트에도 영향
+// 테스트가 깨질 수 있음
+// 실행 순서도 보장되지 않을 수 있음
+// 지양해야할 것
+let someCondition = false;
+
 // my-class라는 css class가 항상 적용된 컴포넌트를 렌더링
 beforeEach(async () => {
-  await render(<TextField className="my-class" />);
+  if (someCondition) {
+    await render(<TextField className="my-class" />);
+  } else {
+    // ...
+  }
 });
 
 it('className prop으로 설정한 css class가 적용된다.', async () => {
