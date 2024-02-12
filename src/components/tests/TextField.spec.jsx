@@ -12,6 +12,14 @@ beforeAll(() => {
   console.log('root - beforeAll');
 });
 
+afterEach(() => {
+  console.log('root - afterEach');
+});
+
+afterAll(() => {
+  console.log('root - afterAll');
+});
+
 it('className prop으로 설정한 css class가 적용된다.', async () => {
   // Arrange - 테스트를 위한 환경 만들기
   // -> className을 가진 TextField를 렌더링
