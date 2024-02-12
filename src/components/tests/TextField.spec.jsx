@@ -99,3 +99,20 @@ it('엔터키를 입력하면 onEnter prop으로 등록한 함수가 호출된�
 
   expect(spy).toHaveBeenCalledWith(typedText);
 });
+
+it('포커스가 활성화되면 onFocus prop으로 등록한 함수가 호출된다.', async () => {
+  // 포커스 활성화 방법
+  // 1. 탭 키로 인풋 요소로 포커스 이동
+  // 2. 인풋 요소를 클릭했을 때 -> 가장 보편적
+  // 3. textInput.focus()로 직접 발생
+
+  const spy = vi.fn();
+  const { user } = await render(<TextField onFocus={spy} />);
+
+  const textInput = screen.getByPlaceholderText('텍스트를 입력해 주세요.');
+
+  await user.click(textInput);
+  // click과 연관 -> 포커스, 마우스다운, 마우스업 등
+
+  expect(spy).toHaveBeenCalled();
+});
