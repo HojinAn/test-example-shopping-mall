@@ -86,3 +86,16 @@ it('텍스트를 입력하면 onChange prop으로 등록한 함수가 호출된�
 
   expect(spy).toHaveBeenCalledWith(typedText);
 });
+
+it('엔터키를 입력하면 onEnter prop으로 등록한 함수가 호출된다.', async () => {
+  const spy = vi.fn();
+  const { user } = await render(<TextField onEnter={spy} />);
+
+  const textInput = screen.getByPlaceholderText('텍스트를 입력해 주세요.');
+
+  const typedText = 'test';
+
+  await user.type(textInput, `${typedText}{Enter}`);
+
+  expect(spy).toHaveBeenCalledWith(typedText);
+});
