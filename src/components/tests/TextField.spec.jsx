@@ -4,6 +4,14 @@ import React from 'react';
 import TextField from '@/components/TextField';
 import render from '@/utils/test/render';
 
+beforeEach(() => {
+  console.log('root - beforeEach');
+});
+
+beforeAll(() => {
+  console.log('root - beforeAll');
+});
+
 it('className prop으로 설정한 css class가 적용된다.', async () => {
   // Arrange - 테스트를 위한 환경 만들기
   // -> className을 가진 TextField를 렌더링
@@ -29,6 +37,10 @@ it('className prop으로 설정한 css class가 적용된다.', async () => {
 });
 
 describe('placeholder', () => {
+  beforeEach(() => {
+    console.log('placeholder - beforeEach');
+  });
+
   // it: test의 alias
   it('기본 placeholder "텍스트를 입력해 주세요."가 렌더링된다.', async () => {
     // 기대 결과 === 실제 결과 -> 성공
