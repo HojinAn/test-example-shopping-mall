@@ -12,6 +12,8 @@ it('className prop으로 설정한 css class가 적용된다.', async () => {
   // jsDOM: Node.js에서 사용하기 위해 웹 표준을 자바스크립트로 구현한 것
   await render(<TextField className="my-class" />);
 
+  screen.debug();
+
   // Act - 테스트할 동작 발생
   // -> 렌더링에 대한 검증이라서 생략
   // -> 클릭, 메서드 호출, prop 변경 등이 해당됨
