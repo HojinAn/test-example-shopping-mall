@@ -24,6 +24,7 @@ it('className prop으로 설정한 css class가 적용된다.', async () => {
   // Arrange - 테스트를 위한 환경 만들기
   // -> className을 가진 TextField를 렌더링
 
+  await render(<TextField className="my-class" />);
   // render API를 호출 -> 테스트 환경의 jsDOM에 리액트 컴포넌트가 렌더링된 DOM 구조가 반영
   // jsDOM: Node.js에서 사용하기 위해 웹 표준을 자바스크립트로 구현한 것
 
@@ -72,9 +73,16 @@ describe('placeholder', () => {
 });
 
 it('텍스트를 입력하면 onChange prop으로 등록한 함수가 호출된다.', async () => {
-  const { user } = await render(<TextField />);
+  const spy = vi.fn(); // 스파이 함수
+  // 스파이 함수: 테스트 코드에서 특정 함수가 호출되었는지, 함수의 인자로 어떤 것이 넘어왔는지, 어떤 값을 반환하는지 등 다양한 값들을 저장
+  // 보통 콜백함수나 이벤트 핸들러 함수가 호출되었는지, 호출되었을 때 어떤 인자를 받았는지 등을 검증할 때 사용
+  const { user } = await render(<TextField onChange={spy} />);
 
   const textInput = screen.getByPlaceholderText('텍스트를 입력해 주세요.');
 
-  await user.type(textInput, 'test');
+  const typedText = 'test';
+
+  await user.type(textInput, typedText);
+
+  expect(spy).toHaveBeenCalledWith(typedText);
 });
