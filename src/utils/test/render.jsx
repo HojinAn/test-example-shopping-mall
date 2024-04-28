@@ -7,7 +7,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 export default async (component, options = {}) => {
   const { routerProps } = options;
-  const user = userEvent.setup();
+  const user = userEvent.setup(); // 다양한 이벤트를 실제 브라우저에서의 동작과 유사하게 시뮬레이션 할 수 있는 라이브러리
 
   // https://tanstack.com/query/v4/docs/react/guides/testing
   const queryClient = new QueryClient({

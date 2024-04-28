@@ -36,9 +36,21 @@ describe('pick util 단위테스트', () => {
   });
 });
 
+// 테스트 코드는 비동기 타이머와 무관하게 동기적으로 실행
+// -> 비동기 함수가 실행되기 전에 단언이 실행됨
+// 타이머 모킹!
 describe('debounce', () => {
+  // 타이머 모킹 -> 0.3초 흐른 것으로 타이머 조작 -> spy 함수 호출 확인
   beforeEach(() => {
+    // teardown에서 모킹 초기화 -> 다른 테스트에 영향이 없어야 함
+
+    // 타이머 모킹도 초기화 필수!
+    // 3rd party 라이브러리, 전역의 teardown에서 타이머에 의존하는 로직 -> fakeTimer로 인해 제대로 동작하지 않을 수 있음
     vi.useFakeTimers();
+
+    // 시간을 흐르기에 매일 달라짐
+    // -> 테스트 당시 시간에 의존하는 테스트의 경우 시간을 고정하지 않으면 테스트가 깨질 수 있다.
+    vi.setSystemTime(new Date('2023-12-25'));
   });
 
   afterEach(() => {
@@ -62,19 +74,27 @@ describe('debounce', () => {
 
     const debouncedFn = debounce(spy, 300);
 
+    // 최초 호출
     debouncedFn();
 
+    // 최초 호출 후 0.2초 후 호출
     vi.advanceTimersByTime(200);
     debouncedFn();
 
+    // 두번째 호출 후 0.1초 후 호출
     vi.advanceTimersByTime(100);
     debouncedFn();
 
+    // 세번째 호출 후 0.2초 후 호출
     vi.advanceTimersByTime(200);
     debouncedFn();
 
+    // 네번째 호출 후 0.3초 후 호출
+    // 최초 호출 후 함수 호출 간격이 0.3초 이상은 다섯번째 호출이 유일
     vi.advanceTimersByTime(300);
+    debouncedFn();
 
+    // 다섯번을 호출했지만 실제 spy 함수는 단 한번만 호출
     expect(spy).toHaveBeenCalledTimes(1);
   });
 });
