@@ -30,7 +30,12 @@ vi.mock('react-router-dom', async () => {
 it('로딩이 완료된 경우 상품 리스트가 제대로 모두 노출된다', async () => {
   await render(<ProductList limit={PRODUCT_PAGE_LIMIT} />);
 
-  const productCards = screen.getAllByTestId('product-card');
+  // 테스트 코드는 동기적으로 실행되기 때문에, 비동기로 동작하는 코드는 실행되지 않음
+  // 테스트 코드는 비동기 코드가 완료될 때까지 기다리지 않고 실행이 끝나버리기 때문에 실패
+  // => 비동기 코드 처리를 위한 findBy(waitFor) 쿼리 제공
+
+  // 1초동안 50ms마다 요소가 있는지 조회
+  const productCards = await screen.findAllByTestId('product-card');
 
   expect(productCards).toHaveLength(PRODUCT_PAGE_LIMIT);
 
