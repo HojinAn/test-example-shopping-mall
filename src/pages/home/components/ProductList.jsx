@@ -15,6 +15,7 @@ import { pick } from '@/utils/common';
 
 const PRODUCT_PAGE_LIMIT = 20;
 
+// 실제 앱에서 사용자와 상호 작용할 로직
 const ProductList = ({ limit = PRODUCT_PAGE_LIMIT }) => {
   const navigate = useNavigate();
   const filter = useFilterStore(state =>

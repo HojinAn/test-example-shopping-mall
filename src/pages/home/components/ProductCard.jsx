@@ -15,6 +15,12 @@ import { pageRoutes } from '@/apiRoutes';
 import { pathToUrl } from '@/helpers/url';
 import { formatPrice } from '@/utils/formatter';
 
+// product prop 기준으로 상품 정보(상품명, 가격, 상품 이미지)가 잘 렌더링되는지
+// onClickAddCartButton, onClickPurchaseButton 함수가 올바르게 동작하는지 -> 스파이 함수
+
+// 스파이 함수는 호출 여부만 검증 -> 사용자가 ProductCard를 눌렀을 때의 동작을 검증 불가
+// API에서 주는 데이터 기준으로 올바르게 렌더링되는지도 검증 불가
+// -> 따라서 카드 말고 리스트를 기준으로 테스트를 작성한다면?
 const ProductCard = ({
   product,
   onClickAddCartButton,
