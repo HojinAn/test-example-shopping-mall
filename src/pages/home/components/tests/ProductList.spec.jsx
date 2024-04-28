@@ -57,9 +57,31 @@ it('로딩이 완료된 경우 상품 리스트가 제대로 모두 노출된다
   });
 });
 
-it('보여줄 상품 리스트가 더 있는 경우 show more 버튼이 노출되며, 버튼을 누르면 상품 리스트를 더 가져온다.', async () => {});
+it('보여줄 상품 리스트가 더 있는 경우 show more 버튼이 노출되며, 버튼을 누르면 상품 리스트를 더 가져온다.', async () => {
+  const { user } = await render(<ProductList limit={PRODUCT_PAGE_LIMIT} />);
 
-it('보여줄 상품 리스트가 없는 경우 show more 버튼이 노출되지 않는다.', async () => {});
+  // show more 버튼의 노출 여부를 정확하게 판단하기 위해
+  // findBy 쿼리를 사용하여 먼저 첫 페이지에 해당하는 상품 목록이 렌더링 되는 것을 기다려야 함
+  await screen.findAllByTestId('product-card');
+
+  expect(screen.getByRole('button', { name: 'Show more' })).toBeInTheDocument();
+
+  const moreBtn = screen.getByRole('button', { name: 'Show more' });
+  await user.click(moreBtn);
+
+  expect(await screen.findAllByTestId('product-card')).toHaveLength(
+    PRODUCT_PAGE_LIMIT * 2,
+  );
+});
+
+it('보여줄 상품 리스트가 없는 경우 show more 버튼이 노출되지 않는다.', async () => {
+  // 모킹 데이터 20개보다 많은 50으로 limit을 설정
+  await render(<ProductList limit={50} />);
+
+  await screen.findAllByTestId('product-card');
+
+  expect(screen.queryByText('Show more')).not.toBeInTheDocument();
+});
 
 describe('로그인 상태일 경우', () => {
   beforeEach(() => {
@@ -67,6 +89,8 @@ describe('로그인 상태일 경우', () => {
   });
 
   it('구매 버튼 클릭시 addCartItem 메서드가 호출되며, "/cart" 경로로 navigate 함수가 호출된다.', async () => {
+    // 통합 테스트 역시 좀 더 큰 범위로 비즈니스 로직을 검증할 수 있지만,
+    // 이처럼 다른 페이지의 로직을 검증할 수는 없기 때문에 이런 모킹 작업이 필요
     const addCartItemFn = vi.fn();
     mockUseCartStore({ addCartItem: addCartItemFn });
 
