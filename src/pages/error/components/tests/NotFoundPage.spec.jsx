@@ -8,8 +8,10 @@ const navigateFn = vi.fn();
 
 vi.mock('react-router-dom', async () => {
   const original = await vi.importActual('react-router-dom');
-
-  return { ...original, useNavigate: () => navigateFn };
+  return {
+    ...original,
+    useNavigate: () => navigateFn,
+  };
 });
 
 it('Home으로 이동 버튼 클릭시 홈 경로로 이동하는 navigate가 실행된다', async () => {
