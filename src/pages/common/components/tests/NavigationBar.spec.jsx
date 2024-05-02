@@ -38,6 +38,7 @@ describe('로그인이 된 경우', () => {
 
   beforeEach(() => {
     // 기존 handlers.js 응답 -> use 함수 내에 응답을 기준으로 테스트 실행
+    // 테스트가 완료된 후 기존 handlers.js의 응답을 바라보도록 설정해야 하지 않을까?
     server.use(
       rest.get(apiRoutes.profile, (_, res, ctx) =>
         res(
@@ -100,7 +101,15 @@ describe('로그인이 된 경우', () => {
   });
 
   // 장바구니 및 로그인 여부 외에 사용자 정보 필요
-  it('장바구니(담긴 상품 수와 버튼)와 로그아웃 버튼(사용자 이름: "Maria")이 노출된다.', async () => {});
+  it('장바구니(담긴 상품 수와 버튼)와 로그아웃 버튼(사용자 이름: "Maria")이 노출된다.', async () => {
+    await render(<NavigationBar />);
+
+    expect(screen.getByTestId('cart-icon')).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: 'Maria' }),
+    ).toBeInTheDocument();
+  });
 
   it('장바구니 버튼 클릭 시 "/cart" 경로로 navigate를 호출한다.', async () => {
     const { user } = await render(<NavigationBar />);
@@ -111,6 +120,7 @@ describe('로그인이 된 경우', () => {
     expect(navigateFn).toHaveBeenNthCalledWith(1, '/cart');
   });
 
+  // 오호.. 로그아웃 버튼 클릭 후 여러 동작에 대해서 테스트 해야 하니까 한 흐름을 describe로 묶고 userEvent를 beforeEach로 묶어서 처리하는구나
   describe('로그아웃 버튼(사용자 이름: "Maria")을 클릭하는 경우', () => {
     let userEvent;
     beforeEach(async () => {

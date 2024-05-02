@@ -13,6 +13,7 @@ beforeAll(() => {
 });
 
 afterEach(() => {
+  // use 함수를 사용하여 동적으로 변경한 모킹 결과를 초기화
   server.resetHandlers();
   vi.clearAllMocks();
 });
