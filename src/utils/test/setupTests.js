@@ -5,6 +5,8 @@ import '@testing-library/jest-dom';
 import { handlers } from '@/__mocks__/handlers';
 
 /* msw */
+// 초기에 구동을 위해 설정한 msw 서버 인스턴스와 동일한 인스턴스를 사용해야
+// 기존에 모킹된 API의 응답을 변경할 수 있음
 export const server = setupServer(...handlers);
 // msw 설정 적용
 // -> 테스트 환경에서 API 호출은 msw의 핸들러에 설정한 응답으로 모킹
@@ -14,6 +16,7 @@ beforeAll(() => {
 });
 // 모킹한 모듈의 히스토리를 초기화
 afterEach(() => {
+  // use 함수를 사용하여 동적으로 변경한 모킹 결과를 초기화
   server.resetHandlers();
   // 모킹된 모의 객체 호출에 대한 히스토리를 초기화
   // 모킹된 모듈의 구현을 초기화하지는 않는다. -> 모킹된 상태로 유지됨
